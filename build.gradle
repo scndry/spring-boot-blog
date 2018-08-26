@@ -7,6 +7,7 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath('org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.2')
     }
 }
 
@@ -33,4 +34,26 @@ dependencies {
     compileOnly('org.projectlombok:lombok')
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('io.projectreactor:reactor-test')
+}
+
+configure(project) {
+    apply plugin: 'jacoco'
+    apply plugin: 'org.sonarqube'
+
+    jacoco {
+        toolVersion = '0.8.1'
+    }
+
+    jacocoTestReport {
+        reports {
+            xml.enabled true
+        }
+    }
+
+    sonarqube {
+        properties {
+            property "sonar.projectName", "spring-boot-blog"
+            property "sonar.projectKey", "io.github.scndry.spring-boot-blog"
+        }
+    }
 }
