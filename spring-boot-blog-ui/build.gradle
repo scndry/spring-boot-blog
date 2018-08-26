@@ -16,6 +16,14 @@ node {
     download = true
 }
 
+sonarqube {
+    //noinspection GroovyAssignabilityCheck
+    properties {
+        property 'sonar.sources', 'src'
+        property 'sonar.ts.tslint.configPath', 'tslint.json'
+    }
+}
+
 task clean(type: Delete) { delete 'dist' }
 
 task build(dependsOn: 'yarn_build')
