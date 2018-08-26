@@ -1,0 +1,3 @@
+ext.utils = [
+    projectsOf: { ... args -> args.collect { project ":spring-boot-blog-$it" } }
+]

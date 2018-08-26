@@ -8,35 +8,50 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath('org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.2')
+        classpath('gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:1.5.1')
     }
 }
 
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
-
-group = 'io.github.scndry'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = 1.8
-
-repositories {
-    mavenCentral()
+plugins {
+    id 'com.github.ben-manes.versions' version '0.20.0'
 }
 
+apply from: 'gradle/utils.gradle'
 
-dependencies {
-    compile('org.springframework.boot:spring-boot-starter-actuator')
-    compile('org.springframework.boot:spring-boot-starter-web')
-    compile('org.springframework.boot:spring-boot-starter-webflux')
-    runtime('org.springframework.boot:spring-boot-devtools')
-    compileOnly('org.springframework.boot:spring-boot-configuration-processor')
-    compileOnly('org.projectlombok:lombok')
-    testCompile('org.springframework.boot:spring-boot-starter-test')
-    testCompile('io.projectreactor:reactor-test')
+allprojects {
+    apply plugin: 'eclipse'
+
+    group = 'io.github.scndry'
+    version = '0.0.1-SNAPSHOT'
 }
 
-configure(project) {
+def bootProjects = utils.projectsOf 'server'
+
+configure(bootProjects) {
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'com.gorylenko.gradle-git-properties'
+
+    sourceCompatibility = 1.8
+
+    repositories {
+        mavenCentral()
+    }
+
+    springBoot {
+        buildInfo {
+            //noinspection GroovyAssignabilityCheck
+            properties {
+                additional = [
+                    'spring-boot-version': springBootVersion
+                ]
+            }
+        }
+    }
+}
+
+configure(bootProjects) {
     apply plugin: 'jacoco'
     apply plugin: 'org.sonarqube'
 
@@ -51,9 +66,10 @@ configure(project) {
     }
 
     sonarqube {
+        //noinspection GroovyAssignabilityCheck
         properties {
-            property "sonar.projectName", "spring-boot-blog"
-            property "sonar.projectKey", "io.github.scndry.spring-boot-blog"
+            property 'sonar.projectName', 'spring-boot-blog'
+            property 'sonar.projectKey', 'io.github.scndry.spring-boot-blog'
         }
     }
 }

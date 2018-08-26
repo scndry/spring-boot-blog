@@ -1,0 +1,23 @@
+plugins {
+    id 'com.moowork.node' version '1.2.0'
+}
+
+node {
+    def cacheDir = new File(rootProject.projectDir, '.gradle')
+    workDir = new File(cacheDir, 'nodejs')
+    npmWorkDir = new File(cacheDir, 'npm')
+    yarnWorkDir = new File(cacheDir, 'yarn')
+    nodeModulesDir = rootProject.projectDir
+
+    version = '8.11.4'
+    npmVersion = '5.6.0'
+    yarnVersion = '1.9.4'
+
+    download = true
+}
+
+task clean(type: Delete) { delete 'dist' }
+
+task build(dependsOn: 'yarn_build')
+
+task uiRun(dependsOn: 'yarn_serve')

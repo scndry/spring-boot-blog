@@ -1,1 +1,3 @@
 rootProject.name = 'spring-boot-blog'
+
+include 'spring-boot-blog-server', 'spring-boot-blog-ui'
