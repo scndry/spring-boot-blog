@@ -26,6 +26,7 @@ allprojects {
 }
 
 def bootProjects = utils.projectsOf 'server'
+def sonarProjects = utils.projectsOf 'server', 'ui'
 
 configure(bootProjects) {
     apply plugin: 'java'
@@ -53,7 +54,6 @@ configure(bootProjects) {
 
 configure(bootProjects) {
     apply plugin: 'jacoco'
-    apply plugin: 'org.sonarqube'
 
     jacoco {
         toolVersion = '0.8.1'
@@ -65,11 +65,16 @@ configure(bootProjects) {
         }
     }
 
+}
+
+configure(sonarProjects) {
+    apply plugin: 'org.sonarqube'
+
     sonarqube {
         //noinspection GroovyAssignabilityCheck
         properties {
-            property 'sonar.projectName', 'spring-boot-blog'
-            property 'sonar.projectKey', 'io.github.scndry.spring-boot-blog'
+            property 'sonar.projectName', project.name
+            property 'sonar.projectKey', "io.github.scndry.${project.name}"
         }
     }
 }
