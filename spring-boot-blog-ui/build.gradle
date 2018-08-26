@@ -7,7 +7,7 @@ node {
     workDir = new File(cacheDir, 'nodejs')
     npmWorkDir = new File(cacheDir, 'npm')
     yarnWorkDir = new File(cacheDir, 'yarn')
-    nodeModulesDir = rootProject.projectDir
+    nodeModulesDir = project.projectDir
 
     version = '8.11.4'
     npmVersion = '5.6.0'
@@ -23,6 +23,8 @@ sonarqube {
         property 'sonar.ts.tslint.configPath', 'tslint.json'
     }
 }
+
+yarn_build.dependsOn yarn_install
 
 task clean(type: Delete) { delete 'dist' }
 
