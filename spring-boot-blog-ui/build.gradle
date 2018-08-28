@@ -20,14 +20,20 @@ sonarqube {
     //noinspection GroovyAssignabilityCheck
     properties {
         property 'sonar.sources', 'src'
+        property 'sonar.tests', 'tests/unit'
         property 'sonar.ts.tslint.configPath', 'tslint.json'
+        property 'sonar.ts.coverage.lcovReportPath', 'coverage/lcov.info'
     }
 }
 
 yarn_build.dependsOn yarn_install
 
-task clean(type: Delete) { delete 'dist' }
+task clean(type: Delete) { delete 'dist', 'coverage' }
+
+task cleanNodeModules(type: Delete) { delete 'node_modules' }
 
 task build(dependsOn: 'yarn_build')
+
+task test(type: YarnTask) { args = ['test:unit', '--coverage'] }
 
 task uiRun(dependsOn: 'yarn_serve')
