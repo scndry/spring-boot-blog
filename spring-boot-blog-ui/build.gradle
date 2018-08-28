@@ -34,7 +34,7 @@ task cleanNodeModules(type: Delete) { delete 'node_modules' }
 
 task build(dependsOn: 'yarn_build')
 
-task test(type: YarnTask) { args = ['test:unit', '--coverage'] }
+task test(type: YarnTask, dependsOn: 'yarn_install') { args = ['test:unit', '--coverage'] }
 
 task uiRun(dependsOn: 'yarn_serve')
 
