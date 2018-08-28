@@ -37,3 +37,5 @@ task build(dependsOn: 'yarn_build')
 task test(type: YarnTask) { args = ['test:unit', '--coverage'] }
 
 task uiRun(dependsOn: 'yarn_serve')
+
+build.dependsOn test
